@@ -1,15 +1,8 @@
 import React, { useRef } from "react";
-import {
-  Animated,
-  Dimensions,
-  PanResponder,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Animated, PanResponder, StyleSheet, View } from "react-native";
+import { SCREEN_WIDTH, SWIPE_OUT_DURATION, SWIPE_THRESHOLD } from "../constant";
 
-const SCREEN_WIDTH = Dimensions.get("window").width; //The device screen width with application, to handle rotation depending on different screen size
-
-export default ({ data, renderCard }) => {
+export default ({ data, renderCard, onSwipeLeft, onSwipeRight }) => {
   const animation = useRef(new Animated.ValueXY()).current;
 
   const panResponder = useRef(
@@ -19,12 +12,34 @@ export default ({ data, renderCard }) => {
         // We are setting the animation location according to the gesture movement
         animation.setValue({ x: gesture.dx, y: gesture.dy });
       }, //called when user click or drag
-      onPanResponderRelease: () => {
+      onPanResponderRelease: (event, gesture) => {
         // when press or clicked or dragged screen is released by the user
-        resetPosition();
+
+        //Setting if liked or disliked
+        if (gesture.dx > SWIPE_THRESHOLD) {
+          forceSwipe("right");
+        } else if (gesture.dx < -SWIPE_THRESHOLD) {
+          forceSwipe("left");
+        } else {
+          resetPosition();
+        }
       },
     })
   ).current;
+
+  const forceSwipe = (direction) => {
+    const width = direction === "right" ? SCREEN_WIDTH : -SCREEN_WIDTH;
+    Animated.timing(animation, {
+      toValue: { x: width, y: 0 },
+      duration: SWIPE_OUT_DURATION, // In ms, how long the animation takes to played
+    }).start(() => {
+      onSwipeComplete(direction);
+    });
+  };
+
+  const onSwipeComplete = (direction) => {
+    direction === "right" ? onSwipeRight() : onSwipeLeft();
+  };
 
   const resetPosition = () => {
     Animated.spring(animation, {

@@ -1,3 +1,4 @@
+import { Dimensions } from "react-native";
 export const DATA = [
   {
     id: 1,
@@ -50,3 +51,10 @@ export const DATA = [
     uri: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
   },
 ];
+
+export const SCREEN_WIDTH = Dimensions.get("window").width; //The device screen width with application, to handle rotation depending on different screen size
+
+//setting minimum amount of distance to be swiped to be liked or disliked
+export const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
+
+export const SWIPE_OUT_DURATION = 250;
