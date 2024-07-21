@@ -15,3 +15,7 @@ export const renderCard = (item) => {
     </Card>
   );
 };
+
+export const onSwipeRight = (item) => {};
+
+export const onSwipeLeft = (item) => {};

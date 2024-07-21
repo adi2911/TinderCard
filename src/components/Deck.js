@@ -4,6 +4,7 @@ import { SCREEN_WIDTH, SWIPE_OUT_DURATION, SWIPE_THRESHOLD } from "../constant";
 
 export default ({ data, renderCard, onSwipeLeft, onSwipeRight }) => {
   const animation = useRef(new Animated.ValueXY()).current;
+  const [currentItem, setCurrentItem] = useState(0);
 
   const panResponder = useRef(
     PanResponder.create({
@@ -38,7 +39,12 @@ export default ({ data, renderCard, onSwipeLeft, onSwipeRight }) => {
   };
 
   const onSwipeComplete = (direction) => {
-    direction === "right" ? onSwipeRight() : onSwipeLeft();
+    direction === "right"
+      ? onSwipeRight(currentItem)
+      : onSwipeLeft(currentItem);
+
+    animation.setValue({ x: 0, y: 0 }); //resetting the position of new card
+    setCurrentItem(currentItem + 1); // new card
   };
 
   const resetPosition = () => {
@@ -62,7 +68,8 @@ export default ({ data, renderCard, onSwipeLeft, onSwipeRight }) => {
 
   const renderCardList = () => {
     return data.map((item, index) => {
-      if (index == 0) {
+      if (index < currentItem) return null;
+      if (index == currentItem) {
         <Animated.View
           key={item.id}
           style={getCardStyle}
@@ -75,6 +82,13 @@ export default ({ data, renderCard, onSwipeLeft, onSwipeRight }) => {
     });
   };
   return <View>{renderCardList()}</View>;
+};
+
+Deck.defaultProps = {
+  data: [], // Default value for data prop
+  renderCard: (item) => null, // Default value for renderCard prop
+  onSwipeLeft: (item) => null,
+  onSwipeRight: (item) => null,
 };
 
 const styles = StyleSheet.create({});
