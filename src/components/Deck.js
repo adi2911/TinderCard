@@ -89,14 +89,17 @@ export default ({
           </Animated.View>;
         }
         return (
-          <View key={item.id} style={styles.cardStyle}>
+          <Animated.View
+            key={item.id}
+            style={[styles.cardStyle, styles.stackedCard]}
+          >
             {renderCard(item)}
-          </View>
+          </Animated.View> //To fix flashing image replaced View to Animated.View
         );
       })
       .reverse(); // To keep index 1 element at the top instead of last one
   };
-  return <Animated.View>{renderCardList()}</Animated.View>; //To fix flashing image replaced View to Animated.View
+  return <View>{renderCardList()}</View>;
 };
 
 Deck.defaultProps = {
@@ -111,5 +114,8 @@ const styles = StyleSheet.create({
   cardStyle: {
     position: "absolute",
     width: SCREEN_WIDTH, // OR we can give left:0 and right:0 to stretch element to compkete width of screen
+  },
+  stackedCard: {
+    top: 10 * (index - currentItem), //keeping the card a little lower to the current card
   },
 });
