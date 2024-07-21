@@ -76,19 +76,25 @@ export default ({
     if (currentItem >= data.length) {
       return renderNoMoreCards();
     }
-    return data.map((item, index) => {
-      if (index < currentItem) return null;
-      if (index == currentItem) {
-        <Animated.View
-          key={item.id}
-          style={getCardStyle}
-          {...panResponder.panHandlers}
-        >
-          {renderCard(item)}
-        </Animated.View>;
-      }
-      return renderCard(item);
-    });
+    return data
+      .map((item, index) => {
+        if (index < currentItem) return null;
+        if (index == currentItem) {
+          <Animated.View
+            key={item.id}
+            style={[getCardStyle(), styles.cardStyle]}
+            {...panResponder.panHandlers}
+          >
+            {renderCard(item)}
+          </Animated.View>;
+        }
+        return (
+          <View key={item.id} style={styles.cardStyle}>
+            {renderCard(item)}
+          </View>
+        );
+      })
+      .reverse(); // To keep index 1 element at the top instead of last one
   };
   return <View>{renderCardList()}</View>;
 };
@@ -101,4 +107,9 @@ Deck.defaultProps = {
   renderNoMoreCards: () => null,
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  cardStyle: {
+    position: "absolute",
+    width: SCREEN_WIDTH, // OR we can give left:0 and right:0 to stretch element to compkete width of screen
+  },
+});
