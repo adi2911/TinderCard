@@ -96,7 +96,7 @@ export default ({
       })
       .reverse(); // To keep index 1 element at the top instead of last one
   };
-  return <View>{renderCardList()}</View>;
+  return <Animated.View>{renderCardList()}</Animated.View>; //To fix flashing image replaced View to Animated.View
 };
 
 Deck.defaultProps = {
