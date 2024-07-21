@@ -1,5 +1,12 @@
-import React, { useRef } from "react";
-import { Animated, PanResponder, StyleSheet, View } from "react-native";
+import React, { useEffect, useRef } from "react";
+import {
+  Animated,
+  LayoutAnimation,
+  PanResponder,
+  StyleSheet,
+  UIManager,
+  View,
+} from "react-native";
 import { SCREEN_WIDTH, SWIPE_OUT_DURATION, SWIPE_THRESHOLD } from "../constant";
 
 export default ({
@@ -33,6 +40,16 @@ export default ({
       },
     })
   ).current;
+
+  useEffect(() => {
+    UIManager.setLayoutAnimationEnabledExperimental &&
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    LayoutAnimation.spring();
+  }, [currentItem]);
+
+  useEffect(() => {
+    if (currentItem != 0) setCurrentItem(0);
+  }, [data]); //When new data arrives
 
   const forceSwipe = (direction) => {
     const width = direction === "right" ? SCREEN_WIDTH : -SCREEN_WIDTH;
