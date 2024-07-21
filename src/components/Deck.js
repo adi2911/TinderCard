@@ -2,7 +2,13 @@ import React, { useRef } from "react";
 import { Animated, PanResponder, StyleSheet, View } from "react-native";
 import { SCREEN_WIDTH, SWIPE_OUT_DURATION, SWIPE_THRESHOLD } from "../constant";
 
-export default ({ data, renderCard, onSwipeLeft, onSwipeRight }) => {
+export default ({
+  data,
+  renderCard,
+  onSwipeLeft,
+  onSwipeRight,
+  renderNoMoreCards,
+}) => {
   const animation = useRef(new Animated.ValueXY()).current;
   const [currentItem, setCurrentItem] = useState(0);
 
@@ -67,6 +73,9 @@ export default ({ data, renderCard, onSwipeLeft, onSwipeRight }) => {
   };
 
   const renderCardList = () => {
+    if (currentItem >= data.length) {
+      return renderNoMoreCards();
+    }
     return data.map((item, index) => {
       if (index < currentItem) return null;
       if (index == currentItem) {
@@ -89,6 +98,7 @@ Deck.defaultProps = {
   renderCard: (item) => null, // Default value for renderCard prop
   onSwipeLeft: (item) => null,
   onSwipeRight: (item) => null,
+  renderNoMoreCards: () => null,
 };
 
 const styles = StyleSheet.create({});

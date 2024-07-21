@@ -1,7 +1,12 @@
 import { StyleSheet, View } from "react-native";
 import Deck from "./src/components/Deck";
 import { DATA } from "./src/constant";
-import { onSwipeLeft, onSwipeRight, renderCard } from "./src/helper";
+import {
+  onSwipeLeft,
+  onSwipeRight,
+  renderCard,
+  renderNoMoreCards,
+} from "./src/helper";
 
 export default function App() {
   return (
@@ -11,6 +16,7 @@ export default function App() {
         renderCard={renderCard}
         onSwipeLeft={onSwipeLeft}
         onSwipeRight={onSwipeRight}
+        renderNoMoreCards={renderNoMoreCards}
       />
     </View>
   );

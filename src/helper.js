@@ -19,3 +19,10 @@ export const renderCard = (item) => {
 export const onSwipeRight = (item) => {};
 
 export const onSwipeLeft = (item) => {};
+
+export const renderNoMoreCards = () => {
+  <Card title="All Done!">
+    <Text>There's no more content here</Text>
+    <Button title={"Get More"} backgroundColor={"#03A9F4"} />
+  </Card>;
+};
